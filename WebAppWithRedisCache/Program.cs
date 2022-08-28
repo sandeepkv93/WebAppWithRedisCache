@@ -19,7 +19,7 @@ if (redisCacheSettings.Enabled)
     builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
         ConnectionMultiplexer.Connect(redisCacheSettings.ConnectionString));
     builder.Services.AddStackExchangeRedisCache(options => options.Configuration = redisCacheSettings.ConnectionString);
-    builder.Services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+    builder.Services.AddSingleton<IResponseCacheService, RedisResponseCacheService>();
 } 
 else
 {

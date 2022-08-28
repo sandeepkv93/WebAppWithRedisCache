@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 
 namespace WebAppWithRedisCache.Services
 {
-    public class ResponseCacheService : IResponseCacheService
+    public class RedisResponseCacheService : IResponseCacheService
     {
         private readonly IDistributedCache _distributedCache;
 
-        public ResponseCacheService(IDistributedCache distributedCache)
+        public RedisResponseCacheService(IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
         }
