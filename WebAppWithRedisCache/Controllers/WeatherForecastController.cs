@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using WebAppWithRedisCache.Cache;
 using WebAppWithRedisCache.Interfaces;
 using WebAppWithRedisCache.Models;
 
@@ -19,6 +20,7 @@ namespace WebAppWithRedisCache.Controllers
         }
 
         [HttpGet(Name = "weather/{city}")]
+        [Cached(600)]
         public async Task<IActionResult> Forecast(string city)
         {
             var weather = await _weatherClient.GetCurrentWeatherForCity(city);

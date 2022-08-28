@@ -1,10 +1,27 @@
-using Microsoft.AspNetCore.Builder.Extensions;
-using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
 using WebAppWithRedisCache;
+using WebAppWithRedisCache.Cache;
 using WebAppWithRedisCache.Interfaces;
 using WebAppWithRedisCache.Models;
+using WebAppWithRedisCache.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Inject Redis cluster to the container
+var redisCacheSettings = builder
+                           .Configuration
+                           .GetSection(nameof(RedisCacheSettings))
+                           .Get<RedisCacheSettings>();
+builder.Services.AddSingleton(redisCacheSettings);
+
+if (redisCacheSettings.Enabled)
+{
+    builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
+    ConnectionMultiplexer.Connect(redisCacheSettings.ConnectionString));
+    builder.Services.AddStackExchangeRedisCache(options => options.Configuration = redisCacheSettings.ConnectionString);
+    builder.Services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+}
+
 // Add services to the container.
 builder.Services.AddControllers();
 
