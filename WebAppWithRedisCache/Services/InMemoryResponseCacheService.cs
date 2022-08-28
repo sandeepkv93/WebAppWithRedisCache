@@ -23,8 +23,7 @@ namespace WebAppWithRedisCache.Services
             var serializedResponse = JsonConvert.SerializeObject(response);
 
             var cacheOptions = new MemoryCacheEntryOptions();
-            var absoluteExpiration = DateTime.UtcNow + timeTimeLive;
-            cacheOptions.SetAbsoluteExpiration(absoluteExpiration);
+            cacheOptions.AbsoluteExpirationRelativeToNow = timeTimeLive;
             cacheOptions.SetSize(1);
             _localCache.Set(cacheKey, serializedResponse, cacheOptions);
             return Task.CompletedTask;
