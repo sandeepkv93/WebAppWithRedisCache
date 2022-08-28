@@ -9,9 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Inject Redis cluster to the container
 var redisCacheSettings = builder
-                           .Configuration
-                           .GetSection(nameof(RedisCacheSettings))
-                           .Get<RedisCacheSettings>();
+                        .Configuration
+                        .GetSection(nameof(RedisCacheSettings))
+                        .Get<RedisCacheSettings>();
 builder.Services.AddSingleton(redisCacheSettings);
 
 if (redisCacheSettings.Enabled)
