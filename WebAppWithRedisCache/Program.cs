@@ -17,9 +17,20 @@ builder.Services.AddSingleton(redisCacheSettings);
 if (redisCacheSettings.Enabled)
 {
     builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
-    ConnectionMultiplexer.Connect(redisCacheSettings.ConnectionString));
+        ConnectionMultiplexer.Connect(redisCacheSettings.ConnectionString));
     builder.Services.AddStackExchangeRedisCache(options => options.Configuration = redisCacheSettings.ConnectionString);
     builder.Services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+} 
+else
+{
+    builder.Services.AddMemoryCache(options =>
+    {
+        // SizeLimit is used as CountLimit where the size of all entities is 1.
+        // Support cache for up to 1000 concurrent loggers.
+        options.SizeLimit = 1000;
+        options.CompactionPercentage = 0.95;
+    });
+    builder.Services.AddSingleton<IResponseCacheService, InMemoryResponseCacheService>();
 }
 
 // Add services to the container.

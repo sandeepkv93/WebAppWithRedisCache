@@ -19,12 +19,6 @@ namespace WebAppWithRedisCache.Cache
         {
             var cacheSettings = context.HttpContext.RequestServices.GetRequiredService<RedisCacheSettings>();
 
-            if (!cacheSettings.Enabled)
-            {
-                await next();
-                return;
-            }
-
             var cacheService = context.HttpContext.RequestServices.GetRequiredService<IResponseCacheService>();
 
             var cacheKey = GenerateCacheKeyFromRequest(context.HttpContext.Request);
